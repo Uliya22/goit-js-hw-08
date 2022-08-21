@@ -10,9 +10,7 @@ let formData = {};
 form.addEventListener('input', throttle(onTextareaInput, 500));
 form.addEventListener('submit', onFormSubmit);
 
-
-populateEmail ();
-populateMessage ();
+populateTextarea ();
 
 form.addEventListener('input', e => {
     formData[e.target.name] = e.target.value;
@@ -23,26 +21,21 @@ function onTextareaInput () {
     // console.log(formData);
 };
 
-function populateEmail () {
-    try {
-    const saveEmail = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (saveEmail) {
-        email.value = saveEmail.email;
-    }
-    }
-    catch(error) {
-    console.log(error.message);
-    }
-}
-function populateMessage () {
-    try {
-    const saveMessage = JSON.parse(localStorage.getItem(STORAGE_KEY));
+function populateTextarea () {
+    const saveMessage = localStorage.getItem(STORAGE_KEY);
     if (saveMessage) {
-        message.value = saveMessage.message;
+        try {
+        formData = JSON.parse(saveMessage)
+        if (formData.email) {
+            email.value = formData.email;
+        }
+        if (formData.message) {
+            message.value = formData.message;
+        }
     }
-    }
-    catch(error) {
-        console.log(error.message);
+        catch(error) {
+            console.log(error.message);
+        }
     }
 }
 
@@ -57,4 +50,4 @@ function onFormSubmit(evt) {
     }
     evt.currentTarget.reset();
     localStorage.removeItem(STORAGE_KEY); 
-};
+}
